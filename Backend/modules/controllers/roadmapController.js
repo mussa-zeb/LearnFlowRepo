@@ -38,25 +38,22 @@ export const getRoadmapById = async (req, res) => {
 export const createRoadmap = async (req, res) => {
   try {
     const {
-      title,
-      description,
-      steps,
-      categories,
-      courseId,
-      contentType,
-      pdfUrl,
-      isPublished,
+      title, description, imageUrl, steps, videoLessons,
+      categories, courseId, pdfUrl, isPublished,
     } = req.body;
+
     const roadmap = new Roadmap({
       title,
       description,
+      imageUrl: imageUrl || "", // SAVES IMAGE URL
       steps: steps || [],
+      videoLessons: videoLessons || [],
       categories: Array.isArray(categories) ? categories : [],
       courseId: courseId || null,
-      contentType: contentType || "text",
       pdfUrl: pdfUrl || "",
       isPublished,
     });
+    
     const created = await roadmap.save();
     const populated = await Roadmap.findById(created._id).populate("categories");
     res.status(201).json(populated);
@@ -68,30 +65,24 @@ export const createRoadmap = async (req, res) => {
 export const updateRoadmap = async (req, res) => {
   try {
     const {
-      title,
-      description,
-      steps,
-      categories,
-      courseId,
-      contentType,
-      pdfUrl,
-      isPublished,
+      title, description, imageUrl, steps, videoLessons,
+      categories, courseId, pdfUrl, isPublished,
     } = req.body;
+    
     const roadmap = await Roadmap.findById(req.params.id);
 
     if (roadmap) {
       roadmap.title = title || roadmap.title;
       roadmap.description = description || roadmap.description;
+      roadmap.imageUrl = imageUrl !== undefined ? imageUrl : roadmap.imageUrl; // UPDATES IMAGE URL
       roadmap.steps = steps !== undefined ? steps : roadmap.steps;
+      roadmap.videoLessons = videoLessons !== undefined ? videoLessons : roadmap.videoLessons;
       if (categories !== undefined) {
         roadmap.categories = Array.isArray(categories) ? categories : [];
       }
-      roadmap.courseId =
-        courseId !== undefined ? courseId || null : roadmap.courseId;
-      roadmap.contentType = contentType || roadmap.contentType;
+      roadmap.courseId = courseId !== undefined ? courseId || null : roadmap.courseId;
       roadmap.pdfUrl = pdfUrl !== undefined ? pdfUrl : roadmap.pdfUrl;
-      roadmap.isPublished =
-        isPublished !== undefined ? isPublished : roadmap.isPublished;
+      roadmap.isPublished = isPublished !== undefined ? isPublished : roadmap.isPublished;
 
       await roadmap.save();
       const populated = await Roadmap.findById(roadmap._id).populate("categories");
