@@ -2,46 +2,70 @@ import { Link } from "react-router-dom";
 import {
   ArrowRight,
   BookOpen,
-  Clock3,
   Users,
-  Compass,
   Play,
-  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Map,
   Layers,
+  Rocket,
+  Award,
+  Infinity as InfinityIcon,
+  Check,
+  Plus,
+  Minus,
+  GraduationCap,
+  Laptop,
+  Library,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { coursesApi, categoriesApi, roadmapsApi } from "../../Shared/utils/api.js";
 import CourseCard from "../../Shared/components/CourseCard";
 import { getCategoryIcon } from "../../Shared/utils/categoryIcons";
 
-// Import all images
-import hero1 from "../../assets/hero-1.png";
-import hero2 from "../../assets/hero-2.png";
-import hero3 from "../../assets/hero-3.png";
-import promoBanner from "../../assets/promo-banner.png";
+// Images (src/assets/ mein maujood hain)
+import heroMain from "../../assets/hero-new.webp";
+import homeNew from "../../assets/home-new.webp";
 
-const benefits = [
+/* ---------- Colors ----------
+   white  #FFFFFF  page background
+   cream  #FDF6EE  cards, boxes, buttons
+   peach  #FBEBDD  soft panels
+   line   #EBDCCB  borders
+   clay   #C8683F  main accent (hover #B0552F)
+   brown  #2B2420  dark sections, headings
+   muted  #7A6A5E  body text
+------------------------------ */
+
+// TODO: apne asli features likho
+const features = [
   {
-    title: "Learn anywhere",
-    description: "Pick up a lesson wherever you have time to learn.",
-    icon: BookOpen,
+    title: "Learn at Your Own Pace",
+    description: "Flexible learning anytime, anywhere.",
+    icon: Rocket,
   },
   {
-    title: "Learn at your pace",
-    description: "Move through lessons at a speed that works for you.",
-    icon: Clock3,
-  },
-  {
-    title: "Explore new skills",
-    description: "Find subjects that help you take your next step.",
-    icon: Compass,
-  },
-  {
-    title: "A clear place to start",
-    description: "Browse courses and choose what interests you.",
+    title: "Expert Instructors",
+    description: "Learn from industry professionals.",
     icon: Users,
   },
+  {
+    title: "Certificates",
+    description: "Showcase your skills with verified certificates.",
+    icon: Award,
+  },
+  {
+    title: "Lifetime Access",
+    description: "Learn once, for a lifetime.",
+    icon: InfinityIcon,
+  },
+];
+
+const perks = [
+  "Free & Premium Courses",
+  "Expert Mentorship",
+  "Career Guidance",
+  "24/7 Support",
 ];
 
 const faqs = [
@@ -57,8 +81,7 @@ const faqs = [
   },
   {
     question: "Who adds courses to LearnFlow?",
-    answer:
-      "Courses are added and managed by the LearnFlow administrator.",
+    answer: "Courses are added and managed by the LearnFlow administrator.",
   },
   {
     question: "Can I learn at my own pace?",
@@ -67,12 +90,21 @@ const faqs = [
   },
 ];
 
+// Chhota label jaise "— Popular Topics"
+const SectionLabel = ({ children }) => (
+  <span className="flex items-center gap-2 text-xs font-semibold text-[#C8683F]">
+    <span className="h-px w-6 bg-[#C8683F]" />
+    {children}
+  </span>
+);
+
 const Home = () => {
   const [courses, setCourses] = useState([]);
   const [roadmaps, setRoadmaps] = useState([]);
   const [popularCategories, setPopularCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState(0);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     let active = true;
@@ -86,13 +118,13 @@ const Home = () => {
         ]);
         if (active) {
           setCourses(
-            Array.isArray(coursesRes.data) ? coursesRes.data.slice(0, 3) : []
+            Array.isArray(coursesRes.data) ? coursesRes.data.slice(0, 8) : []
           );
           setPopularCategories(
             Array.isArray(popularRes.data) ? popularRes.data : []
           );
           setRoadmaps(
-            Array.isArray(roadmapsRes.data) ? roadmapsRes.data.slice(0, 3) : []
+            Array.isArray(roadmapsRes.data) ? roadmapsRes.data.slice(0, 4) : []
           );
         }
       } catch (error) {
@@ -117,82 +149,98 @@ const Home = () => {
     });
   };
 
+  const slide = (dir) => {
+    const el = sliderRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
+  };
+
   return (
-    <main className="overflow-hidden bg-white text-neutral-950">
-      {/* Hero - FORCED SIDE-BY-SIDE ON MOBILE */}
-      <section className="relative isolate h-auto lg:h-[90vh]">
-        <div className="mx-auto grid max-w-7xl grid-cols-[1fr_1fr] items-center gap-3 px-4 pb-12 pt-8 sm:gap-10 sm:px-8 sm:pb-20 sm:pt-16 lg:min-h-[570px] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:px-10 lg:py-16">
-          <div className="relative z-10 max-w-xl">
-            <h1 className="text-[1.65rem] font-semibold leading-[1.1] tracking-[-0.04em] sm:text-5xl lg:text-[4.35rem] lg:leading-[1.04] lg:tracking-[-0.065em]">
-              Your learning journey starts here.
-            </h1>
+    <main className="overflow-hidden bg-white text-[#2B2420]">
+      {/* ================= Hero ================= */}
+      <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 pt-8 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8 lg:px-10 lg:pt-14">
+        <div className="relative z-10">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#EBDCCB] bg-[#FBEBDD] px-3 py-1.5 text-xs font-medium">
+            <GraduationCap className="h-4 w-4 text-[#C8683F]" />
+            Learn • Practice • Grow
+          </span>
 
-            <p className="mt-3 text-[11px] leading-5 text-neutral-600 sm:mt-6 sm:text-base sm:leading-7 lg:text-lg lg:leading-8">
-              Explore practical courses, discover new interests, and build
-              skills one lesson at a time.
-            </p>
+          <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-[-0.02em] sm:text-5xl lg:text-6xl">
+            Your learning journey,{" "}
+            <span className="text-[#C8683F]">starts here.</span>
+          </h1>
 
-            <div className="mt-5 flex flex-col gap-2 sm:mt-8 sm:flex-row sm:gap-3">
-              <Link
-                to="/courses"
-                className="inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full bg-black px-4 text-[10px] font-semibold text-white transition-colors hover:bg-neutral-800 sm:min-h-12 sm:gap-2 sm:px-6 sm:text-sm"
-              >
-                Browse courses
-                <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
-              </Link>
-              <button
-                type="button"
-                onClick={scrollToFeatured}
-                className="inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full border border-neutral-200 bg-white px-4 text-[10px] font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 sm:min-h-12 sm:gap-2 sm:px-6 sm:text-sm"
-              >
-                <Play className="h-3 w-3 sm:h-4 sm:w-4" />
-                Explore courses
-              </button>
-            </div>
+          <p className="mt-5 max-w-md text-sm leading-7 text-[#7A6A5E] sm:text-base">
+            Access world-class courses, expert-led tutorials, and personalized
+            roadmaps to build the skills you need for a brighter future.
+          </p>
+
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <Link
+              to="/courses"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#C8683F] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#B0552F]"
+            >
+              Explore Courses <ArrowRight className="h-4 w-4" />
+            </Link>
+            {/* TODO: video ka link lagao, abhi ye courses section par le jata hai */}
+            <button
+              type="button"
+              onClick={scrollToFeatured}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#EBDCCB] bg-[#FDF6EE] px-6 text-sm font-semibold transition-colors hover:bg-[#FBEBDD]"
+            >
+              <Play className="h-4 w-4 text-[#C8683F]" />
+              Watch Video
+            </button>
+          </div>
+        </div>
+
+        {/* Hero picture */}
+        <div className="relative mx-auto flex w-full max-w-xl items-end justify-center lg:max-w-none">
+          {/* Peeche ka peach blob */}
+          <div className="absolute bottom-0 left-1/2 aspect-[1/1] w-[82%] -translate-x-1/2 rounded-[58%_42%_52%_48%/48%_56%_44%_52%] bg-[#F6DFCB]" />
+
+          {/* Chhote sparkle lines (top right) */}
+          <div className="absolute right-[4%] top-[2%] z-10 hidden sm:block">
+            <span className="absolute left-0 top-2 h-4 w-0.5 rotate-[-30deg] rounded bg-[#C8683F]" />
+            <span className="absolute left-3 top-0 h-5 w-0.5 rounded bg-[#C8683F]" />
+            <span className="absolute left-6 top-2 h-4 w-0.5 rotate-[30deg] rounded bg-[#C8683F]" />
           </div>
 
-          {/* Editorial photo composition */}
-          <div className="relative w-full aspect-[4/5] sm:aspect-[65/47]">
-            <div className="absolute right-[5%] top-[1%] h-[76%] w-[47%] rotate-[7deg] overflow-hidden rounded-[16px] sm:rounded-[34px] bg-neutral-100 shadow-sm">
-              <img
-                src={hero1}
-                alt="Students walking on campus"
-                className="h-full w-full object-cover grayscale"
-              />
-            </div>
-            <div className="absolute left-[5%] top-[22%] z-10 h-[60%] w-[48%] -rotate-[9deg] overflow-hidden rounded-[14px] sm:rounded-[30px] border-[3px] sm:border-[7px] border-white bg-neutral-100 shadow-lg">
-              <img
-                src={hero2}
-                alt="Student coding on a laptop"
-                className="h-full w-full object-cover grayscale"
-              />
-            </div>
-            <div className="absolute bottom-[-5%] right-[9%] z-20 h-[50%] w-[48%] -rotate-[5deg] overflow-hidden rounded-[12px] sm:rounded-[28px] border-[3px] sm:border-[7px] border-white bg-neutral-100 shadow-lg">
-              <img
-                src={hero3}
-                alt="Person reading in a modern library"
-                className="h-full w-full object-cover grayscale"
-              />
-            </div>
-            <div className="absolute bottom-[5%] left-[7%] h-8 w-8 sm:h-16 sm:w-16 lg:h-24 lg:w-24 rounded-[10px] sm:rounded-[20px] bg-neutral-100/80" />
-            <div className="absolute right-[1%] top-[0%] h-6 w-6 sm:h-14 sm:w-14 lg:h-20 lg:w-20 rounded-[8px] sm:rounded-[18px] bg-neutral-100" />
+          {/* Image upar */}
+          <img
+            src={heroMain}
+            alt="LearnFlow learning platform"
+            className="relative z-10 aspect-[5/4] w-full object-contain object-bottom"
+          />
+
+          {/* Floating card 1: laptop (left top) */}
+          <div className="absolute left-[2%] top-[10%] z-20 grid h-20 w-20 -rotate-3 place-items-center rounded-2xl border-4 border-white bg-[#FBEBDD] shadow-lg sm:h-24 sm:w-24">
+            <Laptop className="h-9 w-9 stroke-[1.5] text-[#C8683F] sm:h-11 sm:w-11" />
+          </div>
+
+          {/* Floating card 2: graduation cap (right top) */}
+          <div className="absolute right-[0%] top-[14%] z-20 grid h-20 w-20 rotate-6 place-items-center rounded-2xl border-4 border-white bg-[#FBEBDD] shadow-lg sm:h-24 sm:w-24">
+            <GraduationCap className="h-9 w-9 stroke-[1.5] text-[#2B2420] sm:h-11 sm:w-11" />
+          </div>
+
+          {/* Floating card 3: books (right middle) */}
+          <div className="absolute right-[-2%] top-[50%] z-20 grid h-20 w-20 -rotate-3 place-items-center rounded-2xl border-4 border-white bg-[#FBEBDD] shadow-lg sm:h-24 sm:w-24">
+            <Library className="h-9 w-9 stroke-[1.5] text-[#C8683F] sm:h-11 sm:w-11" />
           </div>
         </div>
       </section>
 
-      {/* Benefits */}
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-8 lg:px-10">
+      {/* ================= Feature cards ================= */}
+      <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-8 lg:px-10">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {benefits.map(({ title, description, icon: Icon }) => (
+          {features.map(({ title, description, icon: Icon }) => (
             <div
               key={title}
-              className="min-h-[142px] rounded-2xl bg-neutral-50 px-4 py-6 text-center sm:px-6"
+              className="rounded-2xl border border-[#EBDCCB] bg-[#FBEBDD]/60 px-4 py-6 text-center"
             >
-              <Icon className="mx-auto h-6 w-6 stroke-[1.7]" />
-              <h2 className="mt-4 text-sm font-semibold text-neutral-900">
-                {title}
-              </h2>
-              <p className="mx-auto mt-1.5 max-w-[210px] text-xs leading-5 text-neutral-500">
+              <Icon className="mx-auto h-7 w-7 stroke-[1.6] text-[#C8683F]" />
+              <h3 className="mt-3 text-sm font-semibold">{title}</h3>
+              <p className="mx-auto mt-1 max-w-[200px] text-xs leading-5 text-[#7A6A5E]">
                 {description}
               </p>
             </div>
@@ -200,203 +248,242 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Popular topics */}
+      {/* ================= Explore Your Interests ================= */}
       {popularCategories.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-8 lg:px-10">
-          <div className="grid gap-7 lg:grid-cols-[260px_1fr] lg:items-center lg:gap-10">
-            <div className="border-l-2 border-neutral-200 pl-5">
-              <span className="mb-4 block h-px w-8 bg-neutral-500" />
-              <h2 className="text-3xl font-semibold tracking-[-0.05em]">
-                Popular topics
+        <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-8 lg:px-10">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <SectionLabel>Popular Topics</SectionLabel>
+              <h2 className="mt-2 text-3xl font-bold tracking-[-0.03em]">
+                Explore Your Interests
               </h2>
-              <p className="mt-2 text-sm leading-6 text-neutral-600">
-                Find a subject that fits your goals and curiosity.
+              <p className="mt-2 text-sm text-[#7A6A5E]">
+                Discover a wide range of topics to kickstart your learning
+                journey.
               </p>
-              <Link
-                to="/courses"
-                className="mt-5 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-semibold text-white transition-colors hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
-              >
-                View all courses <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
             </div>
+            <Link
+              to="/courses"
+              className="inline-flex items-center gap-2 rounded-full border border-[#2B2420]/20 bg-[#FDF6EE] px-5 py-2.5 text-xs font-semibold transition-colors hover:bg-[#FBEBDD]"
+            >
+              Browse All Topics <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {popularCategories.map((cat) => {
-                const Icon = getCategoryIcon(cat.icon);
-                return (
-                  <Link
-                    key={cat._id}
-                    to={`/courses?category=${cat._id}`}
-                    className="flex min-h-[58px] items-center gap-3 rounded-full bg-neutral-50 px-4 text-sm font-medium text-neutral-800 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500"
-                  >
-                    <Icon className="h-5 w-5 shrink-0 stroke-[1.7]" />
-                    <span className="leading-tight">{cat.name}</span>
-                  </Link>
-                );
-              })}
-            </div>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {popularCategories.map((cat) => {
+              const Icon = getCategoryIcon(cat.icon);
+              return (
+                <Link
+                  key={cat._id}
+                  to={`/courses?category=${cat._id}`}
+                  className="flex min-h-[56px] items-center gap-3 rounded-xl border border-[#EBDCCB] bg-[#FDF6EE] px-4 text-sm font-medium transition hover:border-[#C8683F] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C8683F]"
+                >
+                  <Icon className="h-5 w-5 shrink-0 stroke-[1.6] text-[#C8683F]" />
+                  <span className="leading-tight">{cat.name}</span>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
 
-      {/* Promotional banner - Corrected Height & Clean Overlay */}
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-8 lg:px-10">
-        <div className="relative isolate flex h-[130px] items-center overflow-hidden rounded-[16px] sm:h-[280px] sm:rounded-[24px]">
-          <img
-            src={promoBanner}
-            alt="Professional working on laptop"
-            className="absolute inset-0 -z-20 h-full w-full object-cover object-right"
-          />
-          
-          {/* Only the one-sided gradient for text readability */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
-          
-          <div className="flex w-full max-w-lg flex-col items-start justify-center px-5 py-4 text-white sm:px-10 sm:py-8">
-            <h2 className="text-lg font-semibold tracking-[-0.045em] sm:text-3xl lg:text-4xl">
-              Invest in yourself.
-            </h2>
-            <p className="mt-1 max-w-[200px] text-[9px] leading-4 text-neutral-200 sm:mt-2 sm:max-w-xs sm:text-sm sm:leading-6">
-              Make time for learning today and take another step toward tomorrow.
-            </p>
-            <Link
-              to="/courses"
-              className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[9px] font-semibold text-black transition-colors hover:bg-neutral-200 sm:mt-5 sm:gap-2 sm:px-5 sm:py-3 sm:text-xs"
-            >
-              Find your next course <ArrowRight className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured courses */}
-      <section
-        id="featured"
-        className="scroll-mt-24 bg-neutral-50/70 py-16 sm:py-20"
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
-          <div className="mb-9 flex items-end justify-between gap-4">
-            <div>
-              <span className="mb-3 block h-px w-8 bg-neutral-500" />
-              <h2 className="text-3xl font-semibold tracking-[-0.05em]">
-                Featured courses
+      {/* ================= Unlock your potential banner ================= */}
+      <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-8 lg:px-10">
+        <div className="overflow-hidden rounded-3xl border border-[#EBDCCB] bg-[#FBEBDD]">
+          <div className="grid grid-cols-[1.25fr_0.75fr] items-center lg:grid-cols-[1.1fr_0.8fr_1fr]">
+            {/* Text side */}
+            <div className="p-5 sm:p-10 lg:p-12">
+              <h2 className="text-xl font-bold leading-tight tracking-[-0.02em] text-[#2B2420] sm:text-4xl">
+                Unlock Your <span className="text-[#C8683F]">Potential</span>{" "}
+                with LearnFlow
               </h2>
-              <p className="mt-2 text-sm text-neutral-600">
-                A few places to begin your learning journey.
-              </p>
-            </div>
-            <Link
-              to="/courses"
-              className="mb-1 inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-neutral-900 transition-colors hover:text-neutral-500"
-            >
-              View all <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <div
-                  key={item}
-                  className="overflow-hidden rounded-2xl border border-neutral-200 bg-white"
-                >
-                  <div className="aspect-[16/9] animate-pulse bg-neutral-200" />
-                  <div className="space-y-3 p-5">
-                    <div className="h-5 w-3/4 animate-pulse rounded bg-neutral-200" />
-                    <div className="h-4 w-full animate-pulse rounded bg-neutral-100" />
-                    <div className="h-4 w-2/3 animate-pulse rounded bg-neutral-100" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : courses.length > 0 ? (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-              {courses.map((course) => (
-                <CourseCard key={course._id} course={course} />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-dashed border-neutral-300 bg-white px-6 py-16 text-center">
-              <BookOpen className="mx-auto h-8 w-8 text-neutral-400" />
-              <h3 className="mt-4 text-lg font-semibold">No courses yet</h3>
-              <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-neutral-500">
-                New courses will appear here when the administrator adds them.
+              <p className="mt-2 max-w-sm text-[11px] leading-4 text-[#7A6A5E] sm:mt-3 sm:text-sm sm:leading-6">
+                Get unlimited access to premium courses and start building the
+                skills for a successful career today.
               </p>
               <Link
                 to="/courses"
-                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-4"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#C8683F] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#B0552F] sm:mt-6 sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
               >
-                Explore courses <ArrowRight className="h-4 w-4" />
+                Start Learning Free{" "}
+                <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </Link>
             </div>
-          )}
+
+            {/* Perks: sirf desktop par */}
+            <ul className="hidden space-y-3 lg:block lg:p-0">
+              {perks.map((perk) => (
+                <li
+                  key={perk}
+                  className="flex items-center gap-3 text-sm font-medium text-[#2B2420]"
+                >
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#C8683F]">
+                    <Check className="h-3 w-3 text-white" />
+                  </span>
+                  {perk}
+                </li>
+              ))}
+            </ul>
+
+            {/* Picture side */}
+            <div className="relative h-44 sm:h-64 lg:h-full lg:min-h-[320px]">
+              <div className="absolute -right-6 bottom-[-2rem] h-40 w-40 rounded-full bg-[#F6DFCB] sm:-right-10 sm:bottom-[-4rem] sm:h-72 sm:w-72" />
+              <img
+                src={homeNew}
+                alt="Learner working on a laptop"
+                className="absolute inset-0 z-10 h-full w-full object-contain object-bottom"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Learning roadmaps */}
+      {/* ================= Most Popular Courses ================= */}
+      <section
+        id="featured"
+        className="mx-auto max-w-7xl scroll-mt-24 px-4 pt-16 sm:px-8 lg:px-10"
+      >
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <SectionLabel>Featured Courses</SectionLabel>
+            <h2 className="mt-2 text-3xl font-bold tracking-[-0.03em]">
+              Most Popular Courses
+            </h2>
+          </div>
+          <Link
+            to="/courses"
+            className="inline-flex items-center gap-2 rounded-full border border-[#2B2420]/20 bg-[#FDF6EE] px-5 py-2.5 text-xs font-semibold transition-colors hover:bg-[#FBEBDD]"
+          >
+            View All Courses <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="mt-6 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => slide(-1)}
+            aria-label="Previous courses"
+            className="hidden h-9 w-9 shrink-0 place-items-center rounded-full border border-[#EBDCCB] bg-[#FDF6EE] transition-colors hover:bg-[#FBEBDD] sm:grid"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
+          <div className="min-w-0 flex-1">
+            {loading ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {[1, 2, 3, 4].map((item) => (
+                  <div
+                    key={item}
+                    className="overflow-hidden rounded-2xl border border-[#EBDCCB] bg-[#FDF6EE]"
+                  >
+                    <div className="aspect-[16/9] animate-pulse bg-[#EBDCCB]" />
+                    <div className="space-y-3 p-5">
+                      <div className="h-5 w-3/4 animate-pulse rounded bg-[#EBDCCB]" />
+                      <div className="h-4 w-full animate-pulse rounded bg-[#FBEBDD]" />
+                      <div className="h-4 w-2/3 animate-pulse rounded bg-[#FBEBDD]" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : courses.length > 0 ? (
+              <div
+                ref={sliderRef}
+                className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {courses.map((course) => (
+                  <div
+                    key={course._id}
+                    className="w-[85%] shrink-0 snap-start sm:w-[46%] lg:w-[calc(33.333%-0.67rem)] xl:w-[calc(25%-0.75rem)]"
+                  >
+                    <CourseCard course={course} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-[#C8683F]/40 bg-[#FDF6EE] px-6 py-14 text-center">
+                <BookOpen className="mx-auto h-8 w-8 text-[#C8683F]" />
+                <h3 className="mt-4 text-lg font-semibold">No courses yet</h3>
+                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#7A6A5E]">
+                  New courses will appear here when the administrator adds
+                  them.
+                </p>
+                <Link
+                  to="/courses"
+                  className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#C8683F] underline underline-offset-4"
+                >
+                  Explore courses <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => slide(1)}
+            aria-label="Next courses"
+            className="hidden h-9 w-9 shrink-0 place-items-center rounded-full border border-[#EBDCCB] bg-[#FDF6EE] transition-colors hover:bg-[#FBEBDD] sm:grid"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </section>
+
+      {/* ================= Structured Paths (Roadmaps) ================= */}
       {roadmaps.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-10">
-          <div className="mb-9 flex items-end justify-between gap-4">
+        <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-8 lg:px-10">
+          <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="mb-3 block h-px w-8 bg-neutral-500" />
-              <h2 className="text-3xl font-semibold tracking-[-0.05em]">
-                Learning roadmaps
+              <SectionLabel>Learning Roadmaps</SectionLabel>
+              <h2 className="mt-2 text-3xl font-bold tracking-[-0.03em]">
+                Structured Paths for Success
               </h2>
-              <p className="mt-2 text-sm text-neutral-600">
-                Follow a structured path from first lesson to confidence.
+              <p className="mt-2 text-sm text-[#7A6A5E]">
+                Follow curated roadmaps to master skills step by step.
               </p>
             </div>
             <Link
               to="/roadmap"
-              className="mb-1 inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-neutral-900 transition-colors hover:text-neutral-500"
+              className="inline-flex items-center gap-2 rounded-full border border-[#2B2420]/20 bg-[#FDF6EE] px-5 py-2.5 text-xs font-semibold transition-colors hover:bg-[#FBEBDD]"
             >
-              View all <ArrowRight className="h-4 w-4" />
+              Explore All Roadmaps <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {roadmaps.map((rm) => (
               <Link
                 key={rm._id}
                 to={`/roadmap/${rm._id}`}
-                className="group flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="group flex flex-col rounded-2xl border border-[#EBDCCB] bg-[#FDF6EE] p-5 transition-all hover:-translate-y-0.5 hover:border-[#C8683F] hover:shadow-md"
               >
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-900 text-white transition-transform group-hover:scale-110">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[#FBEBDD] text-[#C8683F] transition-colors group-hover:bg-[#C8683F] group-hover:text-white">
                   <Map className="h-5 w-5" />
                 </div>
-                <h3 className="mb-2 line-clamp-1 text-lg font-semibold text-neutral-900 group-hover:text-neutral-700">
+                <h3 className="line-clamp-1 text-base font-semibold">
                   {rm.title}
                 </h3>
-                <p className="mb-4 line-clamp-2 flex-1 text-sm text-neutral-600">
+                <p className="mt-1 line-clamp-2 flex-1 text-xs leading-5 text-[#7A6A5E]">
                   {rm.description}
                 </p>
 
-                {(rm.categories || []).length > 0 && (
-                  <div className="mb-4 flex flex-wrap gap-1">
-                    {rm.categories.slice(0, 2).map((c) => (
-                      <span
-                        key={c._id || c}
-                        className="inline-flex items-center rounded-full bg-neutral-50 px-2 py-0.5 text-[10px] font-medium text-neutral-700 ring-1 ring-neutral-100"
-                      >
-                        {c.name}
-                      </span>
-                    ))}
-                    {rm.categories.length > 2 && (
-                      <span className="inline-flex items-center rounded-full bg-neutral-50 px-2 py-0.5 text-[10px] font-medium text-neutral-700 ring-1 ring-neutral-100">
-                        +{rm.categories.length - 2}
-                      </span>
-                    )}
-                  </div>
-                )}
+                <div className="mt-4 flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#C8683F]" />
+                  <span className="h-px flex-1 bg-[#EBDCCB]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#EBDCCB]" />
+                  <span className="h-px flex-1 bg-[#EBDCCB]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#EBDCCB]" />
+                </div>
 
-                <div className="mt-auto flex items-center justify-between border-t border-neutral-50 pt-4">
-                  <span className="flex items-center gap-1 text-xs font-medium text-neutral-500">
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="flex items-center gap-1 text-xs font-medium text-[#7A6A5E]">
                     <Layers className="h-3.5 w-3.5" />
                     {rm.contentType === "pdf"
                       ? "PDF Guide"
                       : `${rm.steps?.length || 0} Steps`}
                   </span>
-                  <span className="flex items-center gap-1 text-sm font-semibold text-neutral-900 transition-all group-hover:gap-2">
-                    View <ArrowRight className="h-4 w-4" />
+                  <span className="flex items-center gap-1 text-xs font-semibold text-[#C8683F] transition-all group-hover:gap-2">
+                    View <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
               </Link>
@@ -405,73 +492,47 @@ const Home = () => {
         </section>
       )}
 
-      {/* FAQs */}
-      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 lg:px-10 lg:py-20">
+      {/* ================= FAQs ================= */}
+      <section className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-16 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-10">
         <div>
-          <span className="mb-3 block h-px w-8 bg-neutral-500" />
-          <h2 className="max-w-sm text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
-            A few things you might want to know.
+          <SectionLabel>Frequently Asked Questions</SectionLabel>
+          <h2 className="mt-2 text-3xl font-bold tracking-[-0.03em] sm:text-4xl">
+            Have Questions?
           </h2>
-          <p className="mt-3 max-w-sm text-sm leading-6 text-neutral-600">
-            Quick answers to help you get started with LearnFlow.
+          <p className="mt-3 max-w-xs text-sm leading-6 text-[#7A6A5E]">
+            Find answers to the most common questions about LearnFlow.
           </p>
-          <Link
-            to="/courses"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-semibold underline decoration-neutral-300 underline-offset-4 transition-colors hover:decoration-black"
-          >
-            Explore the courses <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
 
-        <div className="divide-y divide-neutral-200 border-y border-neutral-200">
+        <div className="space-y-2">
           {faqs.map((faq, index) => {
             const isOpen = openFaq === index;
             return (
-              <div key={faq.question}>
+              <div
+                key={faq.question}
+                className="rounded-xl border border-[#EBDCCB] bg-[#FDF6EE]"
+              >
                 <button
                   type="button"
                   aria-expanded={isOpen}
                   onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                  className="flex w-full items-center justify-between gap-5 py-5 text-left text-sm font-semibold text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-400"
+                  className="flex w-full items-center justify-between gap-5 px-5 py-4 text-left text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C8683F]"
                 >
                   {faq.question}
-                  <ChevronDown
-                    className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                  />
+                  {isOpen ? (
+                    <Minus className="h-4 w-4 shrink-0 text-[#C8683F]" />
+                  ) : (
+                    <Plus className="h-4 w-4 shrink-0 text-[#C8683F]" />
+                  )}
                 </button>
                 {isOpen && (
-                  <p className="max-w-2xl pb-5 pr-8 text-sm leading-6 text-neutral-600">
+                  <p className="px-5 pb-4 pr-10 text-sm leading-6 text-[#7A6A5E]">
                     {faq.answer}
                   </p>
                 )}
               </div>
             );
           })}
-        </div>
-      </section>
-
-      {/* Final call to action */}
-      <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-8 lg:px-10">
-        <div className="flex flex-col gap-5 rounded-[20px] bg-neutral-950 px-6 py-7 text-white sm:flex-row sm:items-center sm:justify-between sm:px-9">
-          <div className="flex items-center gap-4">
-            <BookOpen className="h-7 w-7 shrink-0 stroke-[1.5]" />
-            <div>
-              <h2 className="text-xl font-semibold tracking-[-0.03em] sm:text-2xl">
-                Ready to start learning?
-              </h2>
-              <p className="mt-1 text-sm text-neutral-400">
-                Explore courses and find something worth learning.
-              </p>
-            </div>
-          </div>
-          <Link
-            to="/courses"
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-black transition-colors hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-          >
-            Browse courses <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
       </section>
     </main>
