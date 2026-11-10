@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = (
   import.meta.env.VITE_API_URL ||
-  "https://learn-flow-backend.vercel.app/api"
+  "https://learn-flow-repo.vercel.app/api"
 ).replace(/\/+$/, "");
 
 export const BACKEND_URL = API_URL.replace(/\/api$/, "");
