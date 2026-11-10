@@ -27,15 +27,7 @@ import { getCategoryIcon } from "../../Shared/utils/categoryIcons";
 import heroMain from "../../assets/hero-new.webp";
 import homeNew from "../../assets/home-new.webp";
 
-/* ---------- Colors ----------
-   white  #FFFFFF  page background
-   cream  #FDF6EE  cards, boxes, buttons
-   peach  #FBEBDD  soft panels
-   line   #EBDCCB  borders
-   clay   #C8683F  main accent (hover #B0552F)
-   brown  #2B2420  dark sections, headings
-   muted  #7A6A5E  body text
------------------------------- */
+
 
 // TODO: apne asli features likho
 const features = [
@@ -160,10 +152,7 @@ const Home = () => {
       {/* ================= Hero ================= */}
       <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 pt-8 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8 lg:px-10 lg:pt-14">
         <div className="relative z-10">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#EBDCCB] bg-[#FBEBDD] px-3 py-1.5 text-xs font-medium">
-            <GraduationCap className="h-4 w-4 text-[#C8683F]" />
-            Learn • Practice • Grow
-          </span>
+          
 
           <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-[-0.02em] sm:text-5xl lg:text-6xl">
             Your learning journey,{" "}

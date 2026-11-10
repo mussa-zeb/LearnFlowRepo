@@ -61,10 +61,7 @@ const About = () => {
       {/* ================= Hero: Our Mission ================= */}
       <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 pt-8 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-10 lg:pt-14">
         <div className="relative z-10">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#EBDCCB] bg-[#FBEBDD] px-3 py-1.5 text-xs font-medium">
-            <GraduationCap className="h-4 w-4 text-[#C8683F]" />
-            About LearnFlow
-          </span>
+          
 
           <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-[-0.02em] sm:text-5xl lg:text-6xl">
             Our <span className="text-[#C8683F]">Mission</span>
@@ -91,14 +88,6 @@ const About = () => {
             >
               Explore Courses <ArrowRight className="h-4 w-4" />
             </Link>
-            <button
-              type="button"
-              onClick={scrollToStory}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#EBDCCB] bg-[#FDF6EE] px-6 text-sm font-semibold transition-colors hover:bg-[#FBEBDD]"
-            >
-              <Play className="h-4 w-4 text-[#C8683F]" />
-              Watch Our Story
-            </button>
           </div>
         </div>
 
