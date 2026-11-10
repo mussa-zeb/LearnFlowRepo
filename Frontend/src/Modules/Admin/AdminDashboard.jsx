@@ -40,7 +40,7 @@ const AdminDashboard = () => {
       name: "Total Courses",
       value: totalCourses,
       icon: BookOpen,
-      color: "bg-neutral-900/5 text-neutral-900",
+      color: "bg-[#F9F6F0] text-[#D48C70]",
       link: "/admin/courses",
     },
     {
@@ -67,21 +67,21 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <>
-      <div className="w-full border-b border-neutral-100 bg-white">
+    <div className="bg-white min-h-screen">
+      <div className="w-full border-b border-[#EBE5D9] bg-white">
         <div className="px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900 mb-1">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1A1816] mb-1">
                 Dashboard
               </h1>
-              <p className="text-neutral-600">
-                Welcome back! Here's an overview of your courses.
+              <p className="text-[#706A63]">
+                Welcome back! Here's an overview of your platform.
               </p>
             </div>
             <Link
               to="/admin/courses/new"
-              className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-neutral-800 hover:shadow-md self-start sm:self-end"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#D48C70] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#c07a5e] hover:shadow-md self-start sm:self-end"
             >
               <Plus className="h-4 w-4" />
               Add new course
@@ -97,14 +97,14 @@ const AdminDashboard = () => {
               <Link
                 key={stat.name}
                 to={stat.link}
-                className="block rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                className="block rounded-2xl border border-[#EBE5D9] bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#D48C70]/50 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#D48C70]"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-neutral-600 mb-1">
+                    <p className="text-sm font-medium text-[#706A63] mb-1">
                       {stat.name}
                     </p>
-                    <p className="text-2xl sm:text-3xl font-semibold text-neutral-900">
+                    <p className="text-2xl sm:text-3xl font-bold text-[#1A1816]">
                       {loading ? "—" : stat.value}
                     </p>
                   </div>
@@ -119,7 +119,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

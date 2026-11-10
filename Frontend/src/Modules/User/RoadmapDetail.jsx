@@ -121,8 +121,8 @@ const RoadmapDetail = () => {
     }
   };
 
-  if (loading) return <div className="p-12 text-center text-[#706A63] min-h-screen bg-[#F9F6F0]">Loading roadmap...</div>;
-  if (!roadmap) return <div className="p-12 text-center text-[#706A63] min-h-screen bg-[#F9F6F0]">Roadmap not found.</div>;
+  if (loading) return <div className="p-12 text-center text-[#706A63] min-h-screen bg-white">Loading roadmap...</div>;
+  if (!roadmap) return <div className="p-12 text-center text-[#706A63] min-h-screen bg-white">Roadmap not found.</div>;
 
   const hasText = roadmap.steps && roadmap.steps.length > 0;
   const hasPdf = !!roadmap.pdfUrl;
@@ -130,16 +130,27 @@ const RoadmapDetail = () => {
   const showTabs = hasText || hasPdf || hasVideo;
 
   return (
-    <div className="bg-[#F9F6F0] min-h-screen pb-20 font-sans">
+    <div className="bg-white min-h-screen pb-20 font-sans overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         
-        <Link to="/roadmap" className="inline-flex items-center gap-1.5 text-sm font-medium text-[#706A63] hover:text-[#1A1816] mb-6 transition-colors">
+        <Link to="/roadmap" className="inline-flex items-center gap-1.5 text-sm font-medium text-[#706A63] hover:text-[#1A1816] mb-6 transition-colors relative z-20">
           <ArrowLeft className="h-4 w-4" /> Back to Roadmaps
         </Link>
 
         {/* Hero Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
-          <div>
+        <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12 py-6">
+          
+          {/* Perfect Overlapping Solid Circles (Right Side) */}
+          <div className="absolute inset-y-0 right-0 w-[500px] pointer-events-none -z-10 hidden md:block translate-x-12">
+            {/* Largest Circle - Top Right */}
+            <div className="absolute -top-24 right-0 w-[450px] h-[450px] rounded-full bg-[#D48C70]/10"></div>
+            {/* Medium Circle - Middle Right */}
+            <div className="absolute top-1/4 -right-10 w-[320px] h-[320px] rounded-full bg-[#D48C70]/15"></div>
+            {/* Smallest Circle - Bottom Right */}
+            <div className="absolute bottom-0 right-20 w-[200px] h-[200px] rounded-full bg-[#D48C70]/20"></div>
+          </div>
+
+          <div className="relative z-10">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1A1816] mb-4">
               {roadmap.title}
             </h1>
@@ -153,12 +164,12 @@ const RoadmapDetail = () => {
             </div>
           </div>
           
-          <div className="flex items-center justify-center w-full">
+          <div className="flex items-center justify-center w-full relative z-10">
             {roadmap.imageUrl ? (
               <img 
                 src={resolveMediaUrl(roadmap.imageUrl)} 
                 alt={roadmap.title} 
-                className="w-full max-h-[300px] sm:max-h-[400px] object-contain" 
+                className="w-full max-h-[300px] sm:max-h-[400px] object-contain drop-shadow-xl" 
               />
             ) : (
               <div className="w-full aspect-video flex items-center justify-center text-[#D48C70]">
@@ -168,9 +179,9 @@ const RoadmapDetail = () => {
           </div>
         </div>
 
-        {/* Dynamic Tabs (FIXED FOR MOBILE) */}
+        {/* Dynamic Tabs */}
         {showTabs && (
-          <div className="flex items-center justify-center mb-8 w-full px-2">
+          <div className="flex items-center justify-center mb-8 w-full px-2 relative z-10">
             <div className="flex w-full sm:w-auto overflow-x-auto bg-white border border-[#EBE5D9] rounded-full p-1.5 shadow-sm [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
               {hasText && (
                 <button 
@@ -213,7 +224,7 @@ const RoadmapDetail = () => {
 
                 return (
                   <div key={idx} className="relative flex items-start gap-4 sm:gap-6 z-10">
-                    <div className="flex-shrink-0 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#D48C70] text-white font-semibold text-lg sm:text-xl shadow-md border-4 border-[#F9F6F0]">
+                    <div className="flex-shrink-0 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#D48C70] text-white font-semibold text-lg sm:text-xl shadow-md border-4 border-white">
                       {idx + 1}
                     </div>
                     <div className="flex-1 rounded-2xl border border-[#EBE5D9] bg-white p-4 sm:p-6 shadow-sm">
@@ -310,7 +321,7 @@ const RoadmapDetail = () => {
               <div className="rounded-2xl border border-[#EBE5D9] overflow-hidden h-full flex flex-col">
                 <div className="bg-[#F9F6F0] px-5 py-4 border-b border-[#EBE5D9] flex justify-between items-center">
                   <h3 className="font-bold text-[#1A1816]">Course Playlist</h3>
-                  <span className="text-xs font-semibold text-[#D48C70] bg-[#F9F6F0] px-2 py-1 rounded-md border border-[#EBE5D9]">{roadmap.videoLessons.length} Lessons</span>
+                  <span className="text-xs font-semibold text-[#D48C70] bg-white px-2 py-1 rounded-md border border-[#EBE5D9]">{roadmap.videoLessons.length} Lessons</span>
                 </div>
                 <div className="divide-y divide-[#EBE5D9] overflow-y-auto flex-1 max-h-[450px]">
                   {roadmap.videoLessons.map((lesson, index) => {

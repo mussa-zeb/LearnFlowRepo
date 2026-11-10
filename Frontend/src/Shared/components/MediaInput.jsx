@@ -1,18 +1,8 @@
-
 import { useRef, useState } from "react";
 import { Link as LinkIcon, Upload, X, Loader2 } from "lucide-react";
 import { uploadApi, resolveMediaUrl } from "../utils/api";
 import { useAdminAuth } from "../context/AdminAuthContext";
 
-/**
- * @param {object} props
- * @param {string} props.label
- * @param {"image"|"video"} props.type
- * @param {string} props.value - Current stored value (relative or absolute)
- * @param {(v: string) => void} props.onChange
- * @param {string} [props.placeholder]
- * @param {string} [props.help]
- */
 const MediaInput = ({
   label,
   type,
@@ -23,7 +13,6 @@ const MediaInput = ({
 }) => {
   const { token } = useAdminAuth();
 
-  // Detect both local uploads and Cloudinary URLs.
   const [mode, setMode] = useState(() =>
     value &&
     (value.includes("/uploads/") ||
@@ -59,7 +48,6 @@ const MediaInput = ({
         }
       );
 
-      // Store the URL returned by the backend (Cloudinary or local).
       onChange(data.url);
     } catch (err) {
       setError(
@@ -77,7 +65,6 @@ const MediaInput = ({
 
   const previewSrc = resolveMediaUrl(value);
 
-  // Recognize both local uploads and Cloudinary media.
   const isUploadedVideo =
     Boolean(value) &&
     type === "video" &&
@@ -86,19 +73,19 @@ const MediaInput = ({
 
   return (
     <div>
-      <label className="block text-sm font-medium text-neutral-900 mb-2">
+      <label className="block text-sm font-medium text-[#1A1816] mb-2">
         {label}
       </label>
 
       {/* Mode toggle */}
-      <div className="inline-flex mb-3 rounded-lg border border-neutral-200 bg-neutral-50 p-0.5">
+      <div className="inline-flex mb-3 rounded-lg border border-[#EBE5D9] bg-[#F9F6F0] p-0.5">
         <button
           type="button"
           onClick={() => setMode("url")}
           className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md transition ${
             mode === "url"
-              ? "bg-white shadow-sm text-neutral-900"
-              : "text-neutral-600 hover:text-neutral-900"
+              ? "bg-white shadow-sm text-[#1A1816]"
+              : "text-[#706A63] hover:text-[#1A1816]"
           }`}
         >
           <LinkIcon className="h-3 w-3" />
@@ -110,8 +97,8 @@ const MediaInput = ({
           onClick={() => setMode("upload")}
           className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md transition ${
             mode === "upload"
-              ? "bg-white shadow-sm text-neutral-900"
-              : "text-neutral-600 hover:text-neutral-900"
+              ? "bg-white shadow-sm text-[#1A1816]"
+              : "text-[#706A63] hover:text-[#1A1816]"
           }`}
         >
           <Upload className="h-3 w-3" />
@@ -126,20 +113,20 @@ const MediaInput = ({
           value={value || ""}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-900 shadow-sm placeholder:text-neutral-400 focus:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-100"
+          className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm placeholder:text-[#706A63] focus:border-[#D48C70] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D48C70] transition-all"
         />
       ) : (
         <div>
           {value ? (
-            <div className="flex items-center gap-2 p-3 rounded-xl border border-neutral-200 bg-neutral-50">
-              <span className="flex-1 truncate text-xs text-neutral-700">
+            <div className="flex items-center gap-2 p-3 rounded-xl border border-[#EBE5D9] bg-[#F9F6F0]">
+              <span className="flex-1 truncate text-xs text-[#706A63]">
                 {value}
               </span>
 
               <button
                 type="button"
                 onClick={() => onChange("")}
-                className="text-neutral-500 hover:text-red-600"
+                className="text-[#706A63] hover:text-red-500 transition-colors"
                 aria-label="Remove"
               >
                 <X className="h-4 w-4" />
@@ -155,19 +142,19 @@ const MediaInput = ({
                 }
                 onChange={handleFile}
                 disabled={uploading}
-                className="block w-full text-sm text-neutral-700 file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-900 file:px-3 file:py-2 file:text-xs file:font-medium file:text-white hover:file:bg-neutral-800 disabled:opacity-60"
+                className="block w-full text-sm text-[#706A63] file:mr-3 file:rounded-lg file:border-0 file:bg-[#D48C70] file:px-3 file:py-2 file:text-xs file:font-medium file:text-white hover:file:bg-[#c07a5e] disabled:opacity-60 transition-all"
               />
 
               {uploading && (
                 <div className="mt-2">
-                  <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-[#EBE5D9] rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-neutral-900 transition-all"
+                      className="h-full bg-[#D48C70] transition-all"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
 
-                  <p className="text-xs text-neutral-500 mt-1 flex items-center gap-1">
+                  <p className="text-xs text-[#706A63] mt-1 flex items-center gap-1">
                     <Loader2 className="h-3 w-3 animate-spin" />
                     Uploading... {progress}%
                   </p>
@@ -179,20 +166,20 @@ const MediaInput = ({
       )}
 
       {help && (
-        <p className="mt-1 text-xs text-neutral-500">
+        <p className="mt-1 text-xs text-[#706A63]">
           {help}
         </p>
       )}
 
       {error && (
-        <p className="mt-2 text-xs text-red-600">
+        <p className="mt-2 text-xs text-red-500">
           {error}
         </p>
       )}
 
       {/* Image preview */}
       {value && type === "image" && (
-        <div className="mt-3 aspect-[16/9] w-full max-w-md overflow-hidden rounded-lg border border-neutral-100">
+        <div className="mt-3 aspect-[16/9] w-full max-w-md overflow-hidden rounded-lg border border-[#EBE5D9]">
           <img
             src={previewSrc}
             alt="Preview"
@@ -203,7 +190,7 @@ const MediaInput = ({
 
       {/* Uploaded video preview */}
       {isUploadedVideo && (
-        <div className="mt-3 aspect-[16/9] w-full max-w-md overflow-hidden rounded-lg border border-neutral-100 bg-black">
+        <div className="mt-3 aspect-[16/9] w-full max-w-md overflow-hidden rounded-lg border border-[#EBE5D9] bg-black">
           <video
             src={previewSrc}
             controls

@@ -104,7 +104,7 @@ const AdminRoadmaps = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#F9F6F0] pb-20">
+    <div className="w-full min-h-screen bg-white pb-20">
       <div className="w-full bg-white border-b border-[#EBE5D9]">
         <div className="px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -131,7 +131,7 @@ const AdminRoadmaps = () => {
               placeholder="Search roadmaps..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full rounded-xl border border-[#EBE5D9] bg-white py-3 pl-11 pr-4 text-sm text-[#1A1816] placeholder:text-[#706A63] shadow-sm focus:border-[#D48C70] focus:outline-none focus:ring-1 focus:ring-[#D48C70] transition-all"
+              className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] py-3 pl-11 pr-4 text-sm text-[#1A1816] placeholder:text-[#706A63] shadow-sm focus:border-[#D48C70] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D48C70] transition-all"
             />
           </div>
           
@@ -140,7 +140,7 @@ const AdminRoadmaps = () => {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="appearance-none rounded-xl border border-[#EBE5D9] bg-white py-3 pl-4 pr-10 text-sm font-medium text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:outline-none"
+                className="appearance-none rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] py-3 pl-4 pr-10 text-sm font-medium text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:outline-none"
               >
                 <option value="all">All Types</option>
                 <option value="text">Text Only</option>
@@ -154,7 +154,7 @@ const AdminRoadmaps = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="appearance-none rounded-xl border border-[#EBE5D9] bg-white py-3 pl-4 pr-10 text-sm font-medium text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:outline-none"
+                className="appearance-none rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] py-3 pl-4 pr-10 text-sm font-medium text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:outline-none"
               >
                 <option value="all">All Status</option>
                 <option value="published">Published</option>
@@ -168,8 +168,8 @@ const AdminRoadmaps = () => {
         {loading ? (
           <div className="text-center py-20 text-[#706A63]">Loading roadmaps...</div>
         ) : filteredRoadmaps.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-[#EBE5D9]">
-            <Map className="h-12 w-12 text-[#EBE5D9] mx-auto mb-4" />
+          <div className="text-center py-20 bg-[#F9F6F0] rounded-2xl border border-[#EBE5D9]">
+            <Map className="h-12 w-12 text-[#D48C70] mx-auto mb-4" />
             <h3 className="text-lg font-bold text-[#1A1816] mb-2">No roadmaps found</h3>
             <p className="text-[#706A63] mb-6">Try adjusting your filters or create a new roadmap.</p>
           </div>
@@ -195,7 +195,6 @@ const AdminRoadmaps = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          {/* FIXED: Shows actual image instead of Map icon */}
                           <div className="h-10 w-10 flex-shrink-0 rounded-xl bg-[#F9F6F0] border border-[#EBE5D9] flex items-center justify-center overflow-hidden p-1">
                             {rm.imageUrl ? (
                               <img src={resolveMediaUrl(rm.imageUrl)} alt={rm.title} className="h-full w-full object-contain" />

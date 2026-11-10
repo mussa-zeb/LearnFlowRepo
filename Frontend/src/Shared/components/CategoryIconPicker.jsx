@@ -20,23 +20,23 @@ const CategoryIconPicker = ({ value, onChange }) => {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm hover:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-100"
+        className="flex w-full items-center justify-between rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm shadow-sm hover:border-[#D48C70] focus:outline-none focus:ring-1 focus:ring-[#D48C70] focus:bg-white transition-all"
       >
         <span className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-neutral-900 text-white">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#D48C70] text-white">
             <SelectedIcon className="h-4 w-4" />
           </span>
-          <span className="text-neutral-900">Change icon</span>
+          <span className="text-[#1A1816] font-medium">Change icon</span>
         </span>
         <ChevronDown
-          className={`h-4 w-4 text-neutral-400 transition-transform ${
+          className={`h-4 w-4 text-[#706A63] transition-transform ${
             open ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {open && (
-        <div className="absolute z-30 mt-2 w-full max-h-72 overflow-y-auto rounded-xl border border-neutral-200 bg-white p-2 shadow-lg">
+        <div className="absolute z-30 mt-2 w-full max-h-72 overflow-y-auto rounded-xl border border-[#EBE5D9] bg-white p-2 shadow-lg">
           <div className="grid grid-cols-6 gap-1">
             {CATEGORY_ICONS.map(({ name, component: Icon }) => {
               const isSelected = name === value;
@@ -51,8 +51,8 @@ const CategoryIconPicker = ({ value, onChange }) => {
                   }}
                   className={`flex h-10 w-full items-center justify-center rounded-lg transition ${
                     isSelected
-                      ? "bg-neutral-900 text-white"
-                      : "text-neutral-700 hover:bg-neutral-100"
+                      ? "bg-[#D48C70] text-white"
+                      : "text-[#706A63] hover:bg-[#F9F6F0] hover:text-[#1A1816]"
                   }`}
                 >
                   <Icon className="h-4 w-4" />

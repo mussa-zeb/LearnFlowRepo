@@ -14,7 +14,7 @@ const CourseForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    categories: [], // ← array of category IDs
+    categories: [],
     duration: "",
     durationMinutes: "",
     thumbnail: "",
@@ -111,41 +111,41 @@ const CourseForm = () => {
   };
 
   if (loadingCourse) {
-    return <div className="p-12 text-center text-neutral-500">Loading...</div>;
+    return <div className="p-12 text-center text-[#706A63] bg-white min-h-screen">Loading...</div>;
   }
 
   return (
-    <>
-      <div className="w-full bg-white border-b border-neutral-100">
+    <div className="bg-white min-h-screen">
+      <div className="w-full bg-white border-b border-[#EBE5D9]">
         <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <Link
             to="/admin/courses"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 hover:text-neutral-900 mb-4"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[#706A63] hover:text-[#1A1816] mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" /> Back to courses
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#1A1816]">
             {isEditMode ? "Edit Course Details" : "Create New Course"}
           </h1>
         </div>
       </div>
 
-      <div className="w-full bg-white py-8">
+      <div className="w-full py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <form onSubmit={handleSubmit} className="space-y-8">
             {error && (
-              <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 ring-1 ring-red-100">
+              <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 border border-red-200">
                 {error}
               </div>
             )}
 
-            <div className="space-y-6 rounded-2xl border border-neutral-100 bg-white p-6 sm:p-8 shadow-sm">
-              <h2 className="text-lg font-medium text-neutral-900 mb-4">
+            <div className="space-y-6 rounded-2xl border border-[#EBE5D9] bg-white p-6 sm:p-8 shadow-sm">
+              <h2 className="text-lg font-bold text-[#1A1816] border-b border-[#EBE5D9] pb-4 mb-4">
                 Basic Information
               </h2>
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 mb-2">
+                  <label className="block text-sm font-medium text-[#1A1816] mb-2">
                     Course Title <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -154,11 +154,11 @@ const CourseForm = () => {
                     required
                     value={formData.title}
                     onChange={handleChange}
-                    className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm focus:ring-2 focus:ring-neutral-100 focus:outline-none"
+                    className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 mb-2">
+                  <label className="block text-sm font-medium text-[#1A1816] mb-2">
                     Description <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -167,21 +167,21 @@ const CourseForm = () => {
                     rows={4}
                     value={formData.description}
                     onChange={handleChange}
-                    className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm resize-none focus:ring-2 focus:ring-neutral-100 focus:outline-none"
+                    className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm resize-none focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                   />
                 </div>
 
                 {/* Categories */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 mb-2">
+                  <label className="block text-sm font-medium text-[#1A1816] mb-2">
                     Categories
                   </label>
                   {availableCategories.length === 0 ? (
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-[#706A63]">
                       No categories yet. Create categories in{" "}
                       <Link
                         to="/admin/categories"
-                        className="underline text-neutral-900"
+                        className="underline text-[#D48C70] hover:text-[#c07a5e]"
                       >
                         Manage Categories
                       </Link>
@@ -198,8 +198,8 @@ const CourseForm = () => {
                             onClick={() => toggleCategory(cat._id)}
                             className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium border transition ${
                               selected
-                                ? "bg-neutral-900 text-white border-neutral-900"
-                                : "bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50"
+                                ? "bg-[#D48C70] text-white border-[#D48C70]"
+                                : "bg-white text-[#706A63] border-[#EBE5D9] hover:bg-[#F9F6F0]"
                             }`}
                           >
                             {cat.name}
@@ -212,7 +212,7 @@ const CourseForm = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-900 mb-2">
+                    <label className="block text-sm font-medium text-[#1A1816] mb-2">
                       Duration Label <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -221,12 +221,12 @@ const CourseForm = () => {
                       required
                       value={formData.duration}
                       onChange={handleChange}
-                      className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm focus:ring-2 focus:ring-neutral-100 focus:outline-none"
+                      className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                       placeholder="e.g. 4 hours"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-900 mb-2">
+                    <label className="block text-sm font-medium text-[#1A1816] mb-2">
                       Duration (Minutes) <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -236,7 +236,7 @@ const CourseForm = () => {
                       min={1}
                       value={formData.durationMinutes}
                       onChange={handleChange}
-                      className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm focus:ring-2 focus:ring-neutral-100 focus:outline-none"
+                      className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                       placeholder="e.g. 240"
                     />
                   </div>
@@ -247,9 +247,9 @@ const CourseForm = () => {
                         name="isPublished"
                         checked={formData.isPublished}
                         onChange={handleChange}
-                        className="h-4 w-4 rounded border-neutral-300 text-neutral-900 focus:ring-neutral-400"
+                        className="h-5 w-5 rounded border-[#EBE5D9] text-[#D48C70] focus:ring-[#D48C70]"
                       />
-                      <span className="text-sm font-medium text-neutral-900">
+                      <span className="text-sm font-medium text-[#1A1816]">
                         Publish
                       </span>
                     </label>
@@ -258,8 +258,8 @@ const CourseForm = () => {
               </div>
             </div>
 
-            <div className="space-y-6 rounded-2xl border border-neutral-100 bg-white p-6 sm:p-8 shadow-sm">
-              <h2 className="text-lg font-medium text-neutral-900 mb-4">
+            <div className="space-y-6 rounded-2xl border border-[#EBE5D9] bg-white p-6 sm:p-8 shadow-sm">
+              <h2 className="text-lg font-bold text-[#1A1816] border-b border-[#EBE5D9] pb-4 mb-4">
                 Course Media
               </h2>
               <div className="space-y-8">
@@ -290,8 +290,8 @@ const CourseForm = () => {
               </div>
             </div>
 
-            <div className="space-y-6 rounded-2xl border border-neutral-100 bg-white p-6 sm:p-8 shadow-sm">
-              <h2 className="text-lg font-medium text-neutral-900 mb-4">
+            <div className="space-y-6 rounded-2xl border border-[#EBE5D9] bg-white p-6 sm:p-8 shadow-sm">
+              <h2 className="text-lg font-bold text-[#1A1816] border-b border-[#EBE5D9] pb-4 mb-4">
                 Course Notes
               </h2>
               <textarea
@@ -300,7 +300,7 @@ const CourseForm = () => {
                 rows={6}
                 value={formData.content}
                 onChange={handleChange}
-                className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm resize-none focus:ring-2 focus:ring-neutral-100 focus:outline-none"
+                className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm resize-none focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                 placeholder="Write supplementary text, requirements, or notes..."
               />
             </div>
@@ -308,14 +308,14 @@ const CourseForm = () => {
             <div className="flex justify-end gap-3">
               <Link
                 to="/admin/courses"
-                className="rounded-xl border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-900 shadow-sm hover:bg-neutral-50"
+                className="rounded-xl border border-[#EBE5D9] bg-white px-5 py-2.5 text-sm font-medium text-[#1A1816] shadow-sm hover:bg-[#F9F6F0] transition-colors"
               >
                 Cancel
               </Link>
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#D48C70] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#c07a5e] disabled:opacity-50 transition-colors"
               >
                 <Save className="h-4 w-4" />
                 {loading
@@ -328,7 +328,7 @@ const CourseForm = () => {
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

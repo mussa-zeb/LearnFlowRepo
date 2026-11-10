@@ -137,20 +137,20 @@ const AdminCategories = () => {
   };
 
   return (
-    <div className="w-full">
-      <div className="w-full bg-white border-b border-neutral-100">
+    <div className="w-full bg-white min-h-screen">
+      <div className="w-full bg-white border-b border-[#EBE5D9]">
         <div className="px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900 mb-1">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1A1816] mb-1">
               Manage Categories
             </h1>
-            <p className="text-neutral-600">
+            <p className="text-[#706A63]">
               Create categories, mark the ones that appear as Popular Topics on the home page.
             </p>
           </div>
           <button
             onClick={openCreate}
-            className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 self-start sm:self-auto"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#D48C70] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#c07a5e] transition-colors self-start sm:self-auto"
           >
             <Plus className="h-4 w-4" /> Add Category
           </button>
@@ -161,16 +161,16 @@ const AdminCategories = () => {
         {formOpen && (
           <form
             onSubmit={handleSubmit}
-            className="mb-6 rounded-2xl border border-neutral-100 bg-white p-6 sm:p-8 shadow-sm space-y-5"
+            className="mb-6 rounded-2xl border border-[#EBE5D9] bg-white p-6 sm:p-8 shadow-sm space-y-5"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-medium text-neutral-900">
+              <h2 className="text-lg font-bold text-[#1A1816]">
                 {editingId ? "Edit Category" : "New Category"}
               </h2>
               <button
                 type="button"
                 onClick={closeForm}
-                className="p-1.5 text-neutral-500 hover:text-neutral-900 rounded-md hover:bg-neutral-100"
+                className="p-1.5 text-[#706A63] hover:text-[#1A1816] rounded-md hover:bg-[#F9F6F0] transition-colors"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
@@ -178,14 +178,14 @@ const AdminCategories = () => {
             </div>
 
             {error && (
-              <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 ring-1 ring-red-100">
+              <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 border border-red-200">
                 {error}
               </div>
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="sm:col-span-1">
-                <label className="block text-sm font-medium text-neutral-900 mb-2">
+                <label className="block text-sm font-medium text-[#1A1816] mb-2">
                   Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -194,13 +194,13 @@ const AdminCategories = () => {
                   required
                   value={form.name}
                   onChange={handleChange}
-                  className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm focus:ring-2 focus:ring-neutral-100 focus:outline-none"
+                  className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                   placeholder="e.g. Coding"
                 />
               </div>
 
               <div className="sm:col-span-1">
-                <label className="block text-sm font-medium text-neutral-900 mb-2">
+                <label className="block text-sm font-medium text-[#1A1816] mb-2">
                   Icon
                 </label>
                 <CategoryIconPicker
@@ -212,7 +212,7 @@ const AdminCategories = () => {
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-neutral-900 mb-2">
+                <label className="block text-sm font-medium text-[#1A1816] mb-2">
                   Description
                 </label>
                 <input
@@ -220,13 +220,13 @@ const AdminCategories = () => {
                   name="description"
                   value={form.description}
                   onChange={handleChange}
-                  className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm"
+                  className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                   placeholder="Short description (optional)"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-900 mb-2">
+                <label className="block text-sm font-medium text-[#1A1816] mb-2">
                   Order (lower shows first)
                 </label>
                 <input
@@ -234,7 +234,7 @@ const AdminCategories = () => {
                   name="order"
                   value={form.order}
                   onChange={handleChange}
-                  className="block w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm shadow-sm"
+                  className="block w-full rounded-xl border border-[#EBE5D9] bg-[#F9F6F0] px-4 py-2.5 text-sm text-[#1A1816] shadow-sm focus:border-[#D48C70] focus:bg-white focus:ring-1 focus:ring-[#D48C70] focus:outline-none transition-all"
                 />
               </div>
 
@@ -245,9 +245,9 @@ const AdminCategories = () => {
                     name="isPopular"
                     checked={form.isPopular}
                     onChange={handleChange}
-                    className="h-5 w-5 rounded border-neutral-300 text-neutral-900 focus:ring-neutral-400"
+                    className="h-5 w-5 rounded border-[#EBE5D9] text-[#D48C70] focus:ring-[#D48C70]"
                   />
-                  <span className="text-sm font-medium text-neutral-900">
+                  <span className="text-sm font-medium text-[#1A1816]">
                     Show as Popular Topic on home page
                   </span>
                 </label>
@@ -258,14 +258,14 @@ const AdminCategories = () => {
               <button
                 type="button"
                 onClick={closeForm}
-                className="rounded-xl border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-900 shadow-sm hover:bg-neutral-50"
+                className="rounded-xl border border-[#EBE5D9] bg-white px-5 py-2.5 text-sm font-medium text-[#1A1816] shadow-sm hover:bg-[#F9F6F0] transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#D48C70] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#c07a5e] disabled:opacity-50 transition-colors"
               >
                 <Save className="h-4 w-4" />
                 {saving
@@ -279,72 +279,72 @@ const AdminCategories = () => {
         )}
 
         {loading ? (
-          <div className="text-center text-neutral-500">
+          <div className="text-center text-[#706A63]">
             Loading categories...
           </div>
         ) : categories.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-neutral-100">
-            <Tag className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-neutral-900 mb-2">
+          <div className="text-center py-20 bg-white rounded-2xl border border-[#EBE5D9]">
+            <Tag className="h-12 w-12 text-[#EBE5D9] mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-[#1A1816] mb-2">
               No categories yet
             </h3>
-            <p className="text-neutral-500 mb-6">
+            <p className="text-[#706A63] mb-6">
               Create your first category to start organizing courses and roadmaps.
             </p>
             <button
               onClick={openCreate}
-              className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-neutral-800"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#D48C70] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#c07a5e] transition-colors"
             >
               <Plus className="h-4 w-4" /> Add Category
             </button>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-neutral-100 bg-white shadow-sm">
-            <table className="min-w-full divide-y divide-neutral-100">
-              <thead className="bg-neutral-50/50">
+          <div className="overflow-hidden rounded-2xl border border-[#EBE5D9] bg-white shadow-sm">
+            <table className="min-w-full divide-y divide-[#EBE5D9]">
+              <thead className="bg-[#F9F6F0]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-[#706A63] uppercase">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-[#706A63] uppercase">
                     Description
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-[#706A63] uppercase">
                     Popular
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-[#706A63] uppercase">
                     Order
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-600 uppercase">
+                  <th className="px-6 py-4 text-right text-xs font-bold text-[#706A63] uppercase">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 bg-white">
+              <tbody className="divide-y divide-[#EBE5D9] bg-white">
                 {categories.map((cat) => {
                   const Icon = getCategoryIcon(cat.icon);
                   return (
-                    <tr key={cat._id} className="hover:bg-neutral-50/50">
+                    <tr key={cat._id} className="hover:bg-[#F9F6F0] transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-700">
+                          <div className="h-10 w-10 rounded-lg bg-[#F9F6F0] border border-[#EBE5D9] flex items-center justify-center text-[#D48C70]">
                             <Icon className="h-5 w-5" />
                           </div>
-                          <span className="text-sm font-medium text-neutral-900">
+                          <span className="text-sm font-semibold text-[#1A1816]">
                             {cat.name}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-neutral-600 max-w-xs truncate">
+                      <td className="px-6 py-4 text-sm text-[#706A63] max-w-xs truncate">
                         {cat.description || "—"}
                       </td>
                       <td className="px-6 py-4">
                         <button
                           onClick={() => togglePopular(cat)}
-                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${
+                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold border transition-colors ${
                             cat.isPopular
-                              ? "bg-amber-50 text-amber-700 ring-amber-100"
-                              : "bg-neutral-50 text-neutral-600 ring-neutral-200"
+                              ? "bg-amber-50 text-amber-700 border-amber-200"
+                              : "bg-[#F9F6F0] text-[#706A63] border-[#EBE5D9] hover:bg-[#EBE5D9]"
                           }`}
                         >
                           {cat.isPopular ? (
@@ -358,21 +358,21 @@ const AdminCategories = () => {
                           )}
                         </button>
                       </td>
-                      <td className="px-6 py-4 text-sm text-neutral-600">
+                      <td className="px-6 py-4 text-sm font-medium text-[#706A63]">
                         {cat.order ?? 0}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex justify-end gap-2">
                           <button
                             onClick={() => openEdit(cat)}
-                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-neutral-700 border border-neutral-200 bg-white hover:bg-neutral-50"
+                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[#706A63] border border-[#EBE5D9] bg-white hover:bg-[#F9F6F0] hover:text-[#1A1816] transition-colors"
                           >
                             <Pencil className="h-3 w-3" /> Edit
                           </button>
                           <button
                             onClick={() => handleDelete(cat._id)}
                             disabled={deleting === cat._id}
-                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-red-700 border border-red-100 bg-white hover:bg-red-50 disabled:opacity-50"
+                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-red-600 border border-red-200 bg-white hover:bg-red-50 disabled:opacity-50 transition-colors"
                           >
                             <Trash2 className="h-3 w-3" />
                             {deleting === cat._id ? "..." : "Delete"}
