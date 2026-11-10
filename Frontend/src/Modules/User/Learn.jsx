@@ -2,7 +2,20 @@ import { useEffect, useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { coursesApi, resolveMediaUrl } from "../../Shared/utils/api";
 import VideoPlayer from "../../Shared/components/VideoPlayer";
-import { ArrowLeft, CheckCircle, Clock, BookOpen, PlayCircle } from "lucide-react";
+import { 
+  ArrowLeft, 
+  CheckCircle, 
+  PlayCircle, 
+  Bell, 
+  ChevronDown, 
+  List, 
+  Play, 
+  Edit3, 
+  Save, 
+  Trophy, 
+  ArrowRight,
+  Download 
+} from "lucide-react";
 
 const Learn = () => {
   const { id } = useParams();
@@ -11,6 +24,10 @@ const Learn = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [completedLessons, setCompletedLessons] = useState([]);
+
+  // --- NOTES STATE ---
+  const [noteContent, setNoteContent] = useState("");
+  const [isSaved, setIsSaved] = useState(false);
 
   // Read the 'lesson' query param from URL. Fallback to 0 if not present.
   const lessonParam = searchParams.get("lesson");
@@ -42,7 +59,6 @@ const Learn = () => {
         const savedProgress = localStorage.getItem("learnflow_progress");
         if (savedProgress) {
           const parsed = JSON.parse(savedProgress);
-          // If there is saved progress for this specific course, load it
           if (parsed[course._id]) {
             setCompletedLessons(parsed[course._id]);
           }
@@ -53,7 +69,7 @@ const Learn = () => {
     }
   }, [course]);
 
-  // 3. Update active lesson if the URL changes (e.g., user uses browser back button)
+  // 3. Update active lesson if the URL changes
   useEffect(() => {
     const p = searchParams.get("lesson");
     if (p !== null) {
@@ -63,6 +79,22 @@ const Learn = () => {
       }
     }
   }, [searchParams]);
+
+  // Calculate lessons and safe index EARLY for notes logic
+  const lessons = course?.lessons && course.lessons.length > 0 
+    ? course.lessons 
+    : (course?.videoUrl ? [{ title: "Full Video", videoUrl: course.videoUrl }] : []);
+    
+  const safeLessonIndex = activeLessonIndex < lessons.length ? activeLessonIndex : 0;
+
+  // --- NEW EFFECT: Load Notes jab bhi lesson ya course change ho ---
+  useEffect(() => {
+    if (course && lessons.length > 0) {
+      const savedNote = localStorage.getItem(`learnflow_note_${course._id}_${safeLessonIndex}`);
+      setNoteContent(savedNote || "");
+      setIsSaved(false); // Reset saved state when switching lessons
+    }
+  }, [course, safeLessonIndex, lessons.length]);
 
   const handleLessonSelect = (index) => {
     setActiveLessonIndex(index);
@@ -80,7 +112,6 @@ const Learn = () => {
     
     setCompletedLessons(newCompleted);
 
-    // Save back to localStorage
     try {
       const savedProgress = localStorage.getItem("learnflow_progress");
       const parsed = savedProgress ? JSON.parse(savedProgress) : {};
@@ -92,109 +123,195 @@ const Learn = () => {
     }
   };
 
-  if (loading) return <div className="p-12 text-center text-neutral-500">Loading course...</div>;
-  if (!course) return <div className="p-12 text-center text-neutral-500">Course not found.</div>;
+  // --- FUNCTION: Notes ko LocalStorage mein save karne ke liye ---
+  const handleSaveNote = () => {
+    if (course && lessons.length > 0) {
+      localStorage.setItem(`learnflow_note_${course._id}_${safeLessonIndex}`, noteContent);
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 2000); 
+    }
+  };
 
-  const lessons = course.lessons && course.lessons.length > 0 
-    ? course.lessons 
-    : (course.videoUrl ? [{ title: "Full Video", videoUrl: course.videoUrl }] : []);
+  // --- NAYA FUNCTION: Notes ko Download karne ke liye ---
+  const handleDownloadNote = () => {
+    if (!noteContent.trim()) {
+      alert("Aapne abhi tak koi note nahi likha hai!");
+      return;
+    }
 
-  // Safety check: if URL has ?lesson=5 but there are only 3 lessons
-  const safeLessonIndex = activeLessonIndex < lessons.length ? activeLessonIndex : 0;
+    // Text file banane ke liye Blob use kar rahe hain
+    const blob = new Blob([noteContent], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.href = url;
+    
+    // File ka naam set kar rahe hain (Course aur Lesson ke naam se)
+    const safeCourseTitle = course.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    const safeLessonTitle = (activeLesson?.title || "lesson").replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    link.download = `Notes_${safeCourseTitle}_${safeLessonTitle}.txt`;
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  if (loading) return <div className="p-12 text-center text-[#706A63] bg-[#FFFFFF] min-h-screen">Loading course...</div>;
+  if (!course) return <div className="p-12 text-center text-[#706A63] bg-[#FFFFFF] min-h-screen">Course not found.</div>;
+
   const activeLesson = lessons[safeLessonIndex];
   const videoSrc = resolveMediaUrl(activeLesson?.videoUrl || "");
 
-  // Calculate progress percentage for the sidebar
   const progressPercent = lessons.length > 0 
     ? Math.round((completedLessons.length / lessons.length) * 100) 
     : 0;
 
+  // --- HELPER FUNCTION: Har Video ka apna Thumbnail nikalne ke liye ---
+  const getLessonThumbnail = (lesson) => {
+    if (lesson?.thumbnail) return lesson.thumbnail;
+    if (lesson?.image) return lesson.image;
+    if (lesson?.thumbnailUrl) return lesson.thumbnailUrl;
+
+    if (lesson?.videoUrl) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = lesson.videoUrl.match(regExp);
+      if (match && match[2].length === 11) {
+        return `https://img.youtube.com/vi/${match[2]}/mqdefault.jpg`;
+      }
+    }
+
+    if (course?.thumbnail) return course.thumbnail;
+    if (course?.image) return course.image;
+
+    return "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80";
+  };
+
   return (
-    <>
-      {/* Header */}
-      <div className="w-full bg-white border-b border-neutral-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex items-center justify-between">
-          <div>
-            <Link to={`/courses/${course._id}`} className="inline-flex items-center gap-1.5 text-sm text-neutral-600 hover:text-neutral-900 mb-2">
-              <ArrowLeft className="h-4 w-4" /> Back to course overview
-            </Link>
-            <h1 className="text-xl sm:text-2xl font-semibold text-neutral-900">{course.title}</h1>
-          </div>
-          <div className="hidden sm:flex items-center gap-4 text-neutral-600">
-            <div className="flex items-center gap-1.5"><Clock className="h-4 w-4" /><span className="text-sm">{course.duration}</span></div>
-            <div className="flex items-center gap-1.5">
-  <BookOpen className="h-4 w-4" />
-  <span className="text-sm">
-    {(course.categories || []).map((c) => c.name).join(" · ") || "Uncategorized"}
-  </span>
-</div>
-          </div>
+    <div className="min-h-screen bg-[#FFFFFF] font-sans pb-20">
+  
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        
+        {/* Back Button & Header */}
+        <div className="mb-6">
+          <Link to={`/courses/${course._id}`} className="inline-flex items-center gap-2 text-sm font-semibold bg-white border border-[#EBE5D9] hover:bg-[#F9F6F0] text-[#1A1816] px-4 py-2 rounded-full transition-colors">
+            <ArrowLeft className="h-4 w-4" /> Back to Courses
+          </Link>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="w-full bg-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
+        <div className="mb-6 flex flex-col gap-3">
+          <div className="inline-flex items-center gap-2 bg-[#D48C70]/10 text-[#D48C70] px-3 py-1 rounded-full w-fit text-sm font-semibold">
+            <Play className="w-3.5 h-3.5 fill-current" />
+            {(course.categories || []).map((c) => c.name).join(" · ") || "Course Category"}
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#1A1816] tracking-tight">
+            {course.title}
+          </h1>
+        </div>
+
+        {/* Main Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-8">
           
-          {/* Video Player Area */}
-          <div className="flex-1 space-y-6">
-            {videoSrc ? (
-              <div className="overflow-hidden rounded-2xl border border-neutral-100 bg-black shadow-sm aspect-video">
+          {/* Left Column (Video + Notes) */}
+          <div className="space-y-6">
+            
+            {/* Video Container (Changed bg to black as per cheat sheet) */}
+            <div className="overflow-hidden rounded-2xl border border-[#EBE5D9] bg-black shadow-sm aspect-video relative">
+              {videoSrc ? (
                 <VideoPlayer src={videoSrc} title={activeLesson?.title} className="h-full w-full" />
-              </div>
-            ) : (
-              <div className="aspect-video bg-neutral-100 rounded-2xl flex items-center justify-center border border-neutral-200">
-                <p className="text-neutral-500">No video uploaded for this lesson.</p>
-              </div>
-            )}
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-black">
+                  <p className="text-[#706A63]">No video uploaded.</p>
+                </div>
+              )}
+            </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-neutral-100 pb-6">
+            {/* Lesson Info & Complete Button */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2">
               <div>
-                <h2 className="text-xl font-semibold text-neutral-900 mb-1">
+                <h2 className="text-2xl font-bold text-[#1A1816] mb-1">
                   {safeLessonIndex + 1}. {activeLesson?.title || "Introduction"}
                 </h2>
-                <p className="text-sm text-neutral-500">Lesson {safeLessonIndex + 1} of {lessons.length}</p>
+                <p className="text-sm font-medium text-[#706A63]">
+                  In this lesson, you will get introduced to the topic and learn the core concepts.
+                </p>
               </div>
+              
+              {/* Button (Using Success Green and Primary Button colors) */}
               <button
                 onClick={() => toggleComplete(safeLessonIndex)}
-                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-all ${
                   completedLessons.includes(safeLessonIndex)
-                    ? "bg-green-50 text-green-700 ring-1 ring-green-200"
-                    : "bg-neutral-900 text-white hover:bg-neutral-800"
+                    ? "bg-green-50 text-green-700 border border-green-200"
+                    : "bg-[#D48C70] hover:bg-[#c07a5e] text-white shadow-sm"
                 }`}
               >
-                <CheckCircle className="h-4 w-4" />
-                {completedLessons.includes(safeLessonIndex) ? "Completed" : "Mark as complete"}
+                <CheckCircle className={`h-4 w-4 ${completedLessons.includes(safeLessonIndex) ? "text-green-700" : "text-white"}`} />
+                {completedLessons.includes(safeLessonIndex) ? "Completed" : "Mark as Complete"}
               </button>
             </div>
 
-            <div className="prose prose-neutral max-w-none text-neutral-700 leading-relaxed whitespace-pre-wrap">
-              {course.content}
+            {/* Notes Section */}
+            <div className="bg-white border border-[#EBE5D9] shadow-sm rounded-2xl p-6 mt-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Edit3 className="w-5 h-5 text-[#1A1816]" />
+                <h3 className="text-lg font-bold text-[#1A1816]">Your Notes</h3>
+              </div>
+              <textarea 
+                placeholder="Take your notes here..."
+                value={noteContent}
+                onChange={(e) => setNoteContent(e.target.value)}
+                onBlur={handleSaveNote} 
+                className="w-full h-32 p-4 rounded-xl bg-[#F9F6F0] border border-[#EBE5D9] focus:border-[#D48C70] focus:bg-white text-[#1A1816] focus:outline-none resize-none mb-4"
+              ></textarea>
+              
+              <div className="flex items-center gap-3">
+
+          
+                {/* DOWNLOAD BUTTON */}
+                <button 
+                  onClick={handleDownloadNote}
+                  className="inline-flex items-center gap-2 border px-4 py-2 rounded-full text-sm font-bold transition-colors bg-white border-[#EBE5D9] hover:bg-[#F9F6F0] text-[#1A1816]"
+                >
+                  <Download className="w-4 h-4" />
+                  Download
+                </button>
+              </div>
             </div>
+
           </div>
 
-          {/* Playlist Sidebar */}
-          <div className="lg:w-80 flex-shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-neutral-100 bg-white shadow-sm overflow-hidden">
+          {/* Right Column (Curriculum Sidebar) */}
+          <div className="space-y-4">
+            <div className="bg-white border border-[#EBE5D9] shadow-sm rounded-2xl overflow-hidden sticky top-8">
               
-              {/* Progress Bar & Header */}
-              <div className="bg-neutral-50 px-5 py-4 border-b border-neutral-100">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-neutral-900">Course Curriculum</h3>
-                  <span className="text-xs font-bold text-neutral-900">{progressPercent}%</span>
+              {/* Header & Progress */}
+              <div className="p-5 border-b border-[#EBE5D9]">
+                <div className="flex items-center gap-3 mb-4">
+                  {/* Header Thumbnail */}
+                  <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#EBE5D9] flex-shrink-0 relative bg-[#F9F6F0]">
+                    <img 
+                      src={course.thumbnail || course.image || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"} 
+                      alt="Course Thumbnail" 
+                      className="w-full h-full object-cover opacity-90" 
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-[#1A1816]">Course Curriculum</h3>
                 </div>
                 
-                {/* Visual Progress Bar */}
-                <div className="w-full h-1.5 bg-neutral-200 rounded-full mb-3 overflow-hidden">
-                  <div 
-                    className="h-full bg-green-500 rounded-full transition-all duration-500"
-                    style={{ width: `${progressPercent}%` }}
-                  />
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-full h-1.5 bg-[#EBE5D9] rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-[#D48C70] rounded-full transition-all duration-500"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-[#706A63] whitespace-nowrap">{progressPercent}% Complete</span>
                 </div>
-                <p className="text-xs text-neutral-500">{completedLessons.length} of {lessons.length} completed</p>
               </div>
 
-              <div className="divide-y divide-neutral-50 max-h-[600px] overflow-y-auto">
+              {/* Modules/Lessons List */}
+              <div className="divide-y divide-[#EBE5D9]/50 max-h-[500px] overflow-y-auto">
                 {lessons.map((lesson, index) => {
                   const isActive = index === safeLessonIndex;
                   const isCompleted = completedLessons.includes(index);
@@ -202,21 +319,40 @@ const Learn = () => {
                     <button
                       key={index}
                       onClick={() => handleLessonSelect(index)}
-                      className={`w-full flex items-start gap-3 p-4 text-left transition-colors ${
-                        isActive ? "bg-neutral-900/5" : "hover:bg-neutral-50"
+                      className={`w-full flex items-center justify-between gap-3 p-4 text-left transition-colors ${
+                        isActive ? "bg-[#D48C70]/10" : "hover:bg-[#F9F6F0]"
                       }`}
                     >
-                      <div className={`mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-medium ${
-                        isActive ? "bg-neutral-900 text-white" : isCompleted ? "bg-green-100 text-green-700" : "bg-neutral-100 text-neutral-500"
-                      }`}>
-                        {isCompleted ? <CheckCircle className="h-3.5 w-3.5" /> : isActive ? <PlayCircle className="h-3.5 w-3.5" /> : index + 1}
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        
+                        {/* Dynamic Thumbnail */}
+                        <div className={`relative w-20 h-12 flex-shrink-0 rounded-md overflow-hidden border ${
+                          isActive ? "border-[#D48C70] shadow-sm" : "border-[#EBE5D9]"
+                        }`}>
+                          <img 
+                            src={getLessonThumbnail(lesson)} 
+                            alt={lesson.title} 
+                            className="w-full h-full object-cover" 
+                            onError={(e) => {
+                              e.target.src = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80";
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                            <Play className={`w-4 h-4 fill-current ${isActive ? 'text-[#D48C70]' : 'text-white'}`} />
+                          </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className="flex-1 truncate">
+                          <p className={`text-sm font-semibold truncate ${
+                            isActive ? "text-[#D48C70]" : isCompleted ? "text-[#706A63]" : "text-[#1A1816]"
+                          }`}>
+                            {index + 1}. {lesson.title}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium truncate ${isActive ? "text-neutral-900" : "text-neutral-700"}`}>
-                          {lesson.title}
-                        </p>
-                        <p className="text-xs text-neutral-500 mt-0.5">Video Lesson</p>
-                      </div>
+                      
+                      <span className="text-xs font-medium text-[#706A63]">Video</span>
                     </button>
                   );
                 })}
@@ -226,7 +362,7 @@ const Learn = () => {
 
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
