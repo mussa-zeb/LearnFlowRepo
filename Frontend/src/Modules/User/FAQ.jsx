@@ -50,10 +50,7 @@ const FAQ = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 text-center relative z-10">
           <div className="relative">
-            <span className="inline-flex items-center gap-2 bg-[#FBEDE7] text-[#1A1816] text-sm font-medium px-4 py-1.5 rounded-full">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#D48C70] text-white text-xs">?</span>
-              Frequently Asked Questions
-            </span>
+            
             <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-extrabold tracking-tight text-[#1A1816] mt-5 leading-tight">
               How can we <span className="text-[#D48C70]">help?</span>
             </h1>

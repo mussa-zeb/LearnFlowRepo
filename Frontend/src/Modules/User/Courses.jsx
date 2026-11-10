@@ -144,10 +144,7 @@ const Courses = () => {
 
           {/* Hero Content */}
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#F9F6F0] text-[#1A1816] px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-lg mb-3 sm:mb-6 border border-[#EBE5D9]">
-              <BookOpen className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="text-[10px] sm:text-sm font-semibold">Our Courses</span>
-            </div>
+            
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight tracking-tight text-[#1A1816]">
               Browse Our <span className="text-[#D9784C]">Courses</span>
