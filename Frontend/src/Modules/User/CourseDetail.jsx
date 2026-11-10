@@ -6,7 +6,7 @@ import {
   roadmapsApi,
   resolveMediaUrl,
 } from "../../Shared/utils/api";
-import CourseDetailHeroImage from "../../../src/assets/hero10.png"
+import CourseDetailHeroImage from "../../../src/assets/hero10.png";
 
 import VideoPlayer from "../../Shared/components/VideoPlayer";
 
@@ -23,7 +23,6 @@ import {
   Sparkles,
   ChevronRight,
   Bookmark,
-  Laptop,
 } from "lucide-react";
 
 // PUT YOUR ONLINE IMAGE URL HERE (direct link ending in .png)
@@ -122,86 +121,93 @@ const CourseDetail = () => {
           HERO SECTION
       ========================================== */}
       <section className="relative overflow-hidden bg-white border-b border-[#EBE5D9]">
-        {/* Soft gradient on the right side */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#F9F6F0] to-transparent pointer-events-none z-0" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 z-10">
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14 z-10">
           <Link
             to="/courses"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#706A63] hover:text-[#D48C70] mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#706A63] hover:text-[#D48C70] mb-6 sm:mb-8 transition-colors relative z-20"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={15} className="sm:hidden" />
+            <ArrowLeft size={17} className="hidden sm:block" />
             Back to Courses
           </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* 2 Columns (Text Left, Image Right) */}
+          <div
+            className="grid items-center gap-2 sm:gap-10 lg:gap-16 relative"
+            style={{ gridTemplateColumns: "1.1fr 0.9fr" }}
+          >
             {/* LEFT SIDE CONTENT */}
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#F9F6F0] border border-[#EBE5D9] text-[#1A1816] text-sm font-semibold mb-6">
-                <GraduationCap size={16} className="text-[#D48C70]" />
+            <div className="relative z-20">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-lg bg-[#F9F6F0] border border-[#EBE5D9] text-[#1A1816] text-[10px] sm:text-sm font-semibold mb-3 sm:mb-6">
+                <GraduationCap size={12} className="text-[#D48C70] sm:hidden" />
+                <GraduationCap size={16} className="text-[#D48C70] hidden sm:block" />
                 {categories.length > 0
                   ? categories.map((c) => c.name || "Category").join(" • ")
                   : "Programming & Technology"}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-[52px] font-bold tracking-tight leading-[1.15] text-[#1A1816] mb-5">
+              <h1 className="text-[19px] sm:text-4xl lg:text-[52px] font-bold tracking-tight leading-[1.2] sm:leading-[1.15] text-[#1A1816] mb-3 sm:mb-5">
                 {course.title}
               </h1>
 
-              <p className="text-base sm:text-lg text-[#706A63] leading-relaxed max-w-xl mb-8">
+              <p className="text-[11px] sm:text-lg text-[#706A63] leading-5 sm:leading-relaxed max-w-xl mb-4 sm:mb-8">
                 {course.description}
               </p>
 
               {/* COURSE STATISTICS */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-4 text-sm text-[#706A63]">
-                <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#EBE5D9] shadow-sm">
-                  <Clock size={16} className="text-[#D48C70]" />
+              <div className="flex flex-wrap items-center gap-2 sm:gap-x-6 sm:gap-y-4 text-[10px] sm:text-sm text-[#706A63]">
+                <div className="flex items-center gap-1.5 sm:gap-2 bg-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-[#EBE5D9] shadow-sm">
+                  <Clock size={12} className="text-[#D48C70] sm:hidden" />
+                  <Clock size={16} className="text-[#D48C70] hidden sm:block" />
                   <span className="font-semibold text-[#1A1816]">
                     {course.duration}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#EBE5D9] shadow-sm">
-                  <BookOpen size={16} className="text-[#D48C70]" />
+                <div className="flex items-center gap-1.5 sm:gap-2 bg-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-[#EBE5D9] shadow-sm">
+                  <BookOpen size={12} className="text-[#D48C70] sm:hidden" />
+                  <BookOpen size={16} className="text-[#D48C70] hidden sm:block" />
                   <span>{lessons.length} Lessons</span>
                 </div>
 
-                <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#EBE5D9] shadow-sm">
-                  <CheckCircle size={16} className="text-[#D48C70]" />
+                <div className="flex items-center gap-1.5 sm:gap-2 bg-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-[#EBE5D9] shadow-sm">
+                  <CheckCircle size={12} className="text-[#D48C70] sm:hidden" />
+                  <CheckCircle size={16} className="text-[#D48C70] hidden sm:block" />
                   <span>Lifetime Access</span>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT SIDE IMAGE */}
-            <div className="relative flex items-center justify-center lg:justify-end z-10 mt-8 lg:mt-0">
-              {/* 3 CIRCLES CENTERED BEHIND IMAGE */}
-              <div className="absolute inset-0 hidden lg:flex items-center justify-center pointer-events-none">
-                <div className="absolute h-[420px] w-[420px] rounded-full bg-[#D48C70]/5" />
-                <div className="absolute h-[300px] w-[300px] rounded-full bg-[#D48C70]/10" />
-                <div className="absolute h-[180px] w-[180px] rounded-full bg-[#D48C70]/15" />
+            {/* RIGHT SIDE IMAGE & CIRCLES */}
+            <div className="relative flex items-center justify-center sm:justify-end z-10 h-full pt-4 pb-8 sm:pb-0">
+              
+              {/* Wrapper to keep Circles perfectly scaled behind the Image */}
+              <div className="relative w-[190px] h-[190px] sm:w-[320px] sm:h-[320px] lg:w-[460px] lg:h-[460px] flex items-center justify-center">
+                
+                {/* Desktop Circles */}
+                <div className="absolute inset-0 hidden lg:block pointer-events-none">
+                  <div className="absolute -top-[10%] -right-[10%] w-full h-full rounded-full bg-[#D48C70]/10" />
+                  <div className="absolute top-[15%] right-[10%] w-[75%] h-[75%] rounded-full bg-[#D48C70]/15" />
+                  <div className="absolute bottom-0 -right-[10%] w-[50%] h-[50%] rounded-full bg-[#D48C70]/20" />
+                </div>
+
+                {/* Mobile Circles */}
+                <div className="absolute inset-0 lg:hidden pointer-events-none">
+                  <div className="absolute -top-[5%] -right-[5%] w-full h-full rounded-full bg-[#D48C70]/10" />
+                  <div className="absolute top-[15%] right-[10%] w-[80%] h-[80%] rounded-full bg-[#D48C70]/15" />
+                  <div className="absolute bottom-0 -right-[5%] w-[50%] h-[50%] rounded-full bg-[#D48C70]/20" />
+                </div>
+
+                {/* Image (Increased size, perfect fit) */}
+                <img
+                  src={CourseDetailHeroImage}
+                  alt="Graduation cap, books and pencils"
+                  className="relative z-10 w-full max-w-[200px] sm:max-w-[280px] lg:max-w-[400px] h-auto object-contain drop-shadow-xl"
+                />
+                
               </div>
 
-              <img
-                src={CourseDetailHeroImage}
-                alt="Graduation cap, books and pencils"
-                className="relative z-10 w-full max-w-[520px] h-auto object-contain drop-shadow-xl"
-              />
-
-              {/* Floating Card */}
-              <div className="absolute z-20 bottom-2 sm:bottom-6 right-4 sm:right-10 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#EBE5D9] p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#F7EAE1] flex items-center justify-center">
-                  <Laptop size={20} className="text-[#D48C70]" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-[#1A1816] text-sm">
-                    LearnFlow Academy
-                  </h3>
-                  <p className="text-[11px] text-[#706A63]">
-                    Learn Today. Lead Tomorrow.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
